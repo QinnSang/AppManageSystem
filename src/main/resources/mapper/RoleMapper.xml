@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.RoleMapper">
+
+	<insert id="insert" parameterType="pojo.Role">
+		insert into role (id,name, remark, create_date)
+		values (#{id},#{name},#{remark},#{createDate})
+	</insert>
+
+	<update id="update" parameterType="pojo.Role">
+		update role
+		<set>
+			<if test="name!=null and name!=''">
+				,name=#{name}
+			</if>
+			<if test="remark!=null and remark!=''">
+				,desc=#{remark}
+			</if>
+			<if test="updateDate!=null">
+				,update_date=#{updateDate}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<delete id="deleteRoleMenu" parameterType="pojo.Role">
+		delete from role_menu where role_id=#{id}
+	</delete>
+
+	<insert id="insertRoleMenu" parameterType="pojo.Role">
+		insert into role_menu (role_id, menu_id)
+		<foreach collection="menuList" item="menu" separator="union all">
+			select #{id},#{menu.id}
+			from dual
+		</foreach>
+	</insert>
+
+	<select id="queryAllRole" resultType="pojo.Role">
+		select * from role
+	</select>
+
+	<select id="getRoleByUser" resultType="pojo.Role">
+		  select r.id, name, remark, create_date, update_date, create_by, update_by
+		  from role r
+		  join user_role ur on r.id=ur.role_id
+		  join dev_user u on u.id=ur.user_id
+		  where u.id=#{id}
+	</select>
+</mapper>

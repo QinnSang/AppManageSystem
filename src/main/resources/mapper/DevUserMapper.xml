@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.DevUserMapper">
+    <update id="updateDevUser" parameterType="pojo.DevUser">
+        update dev_user set status=0 where id=#{id};
+    </update>
+    <select id="queryByNameAndPwd" parameterType="pojo.DevUser" resultType="pojo.DevUser">
+        select * from dev_user
+        <where>
+            <if test="devCode!=null and devCode!=''">
+                and dev_code=#{devCode}
+            </if>
+            <if test="devPassword!=null and devPassword!=''">
+                and dev_password=#{devPassword}
+            </if>
+        </where>
+    </select>
+    <select id="queryByName" resultType="pojo.DevUser">
+        select * from dev_user
+        <where>
+            dev_code=#{devCode}
+        </where>
+    </select>
+    <select id="queryByEmail" resultType="pojo.DevUser">
+        select * from dev_user
+        <where>
+            dev_email=#{devEmail}
+        </where>
+    </select>
+    <insert id="register" parameterType="pojo.DevUser">
+        insert into dev_user (dev_code, dev_password, dev_email,validateCode,status,creation_date)
+        values(#{devCode},#{devPassword},#{devEmail},#{validateCode},#{status},#{creationDate})
+    </insert>
+</mapper>

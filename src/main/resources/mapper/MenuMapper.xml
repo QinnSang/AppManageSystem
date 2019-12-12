@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.MenuMapper">
+
+	<sql id="menuColumns">
+		a.id,
+		a.parent_id AS "parent.id",
+		a.parent_ids,
+		a.name,
+		a.href,
+		a.sort,
+		a.permission,
+		p.name AS "parent.name"
+	</sql>
+
+	<select id="findAllMenu" resultType="pojo.Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		from menu a
+		LEFT JOIN menu p ON p.id = a.parent_id
+		ORDER BY a.sort
+	</select>
+
+	<select id="getMenuList" resultType="pojo.Menu">
+	   SELECT
+	   	<include refid="menuColumns"/>
+	     from menu a
+		LEFT JOIN menu p ON p.id = a.parent_id
+		JOIN role_menu rm ON rm.menu_id = a.id
+		JOIN role r ON r.id = rm.role_id
+		JOIN user_role ur ON ur.role_id = r.id
+		JOIN dev_user u ON u.id = ur.user_id
+		where  u.id = #{id}
+		ORDER BY a.sort
+	</select>
+</mapper>
