@@ -22,7 +22,7 @@
     <!--指定json版本-->
     <jackson.version>2.9.8</jackson.version>
     <poi.version>3.17</poi.version>
-    <shiro.version>1.4.0</shiro.version>
+    <shiro.version>1.10.0</shiro.version>
     <activiti.version>5.21.0</activiti.version>
 
   </properties>
